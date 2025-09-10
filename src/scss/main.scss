@@ -1,0 +1,819 @@
+$main-font: 'Roboto', sans-serif;
+$logo-font: Georgia, sans-serif;
+$rgb-white: rgb(255, 255, 255);
+$rgb-black: rgb(0, 0, 0);
+$rgb-black-alpha: rgb(0, 0, 0, 0.2);
+$rgb-button-color: rgb(247, 92, 73);
+$rgb-text-color: rgb(102, 102, 102);
+$rgb-logo-dark: rgb(45, 45, 45);
+$rgb-logo-light: rgb(248, 112, 95);
+$rgb-table-dark: rgb(249, 245, 249);
+$rgb-teacher-border-color: rgb(249, 149, 137);
+$rgb-teacher-active-border-color: rgb(209, 67, 55);
+$rgb-text-active: rgb(213, 71, 69);
+$rgb-star: rgb(255, 215, 0);
+$rgb-dialog-header: rgb(70, 70, 72);
+$rgb-email: rgb(135, 211, 224);
+
+@mixin button-style {
+  background-color: $rgb-white;
+  border: 1px solid $rgb-button-color;
+  padding: 10px 15px;
+  color: $rgb-button-color;
+  font-weight: bold;
+  cursor: pointer;
+  transition: color 0.2s linear;
+
+  &:hover {
+    color: $rgb-white;
+    background-color: $rgb-button-color;
+  }
+}
+
+@mixin select-style {
+  border: 1px solid $rgb-black;
+  padding: 5px 0;
+
+  &:hover {
+    cursor: pointer;
+  }
+}
+
+
+@mixin filter-hover-style {
+  &:hover {
+    color: $rgb-black;
+    cursor: pointer;
+  }
+}
+
+@mixin input-text-style {
+  border: $rgb-text-color solid 1px;
+  padding: 6px;
+  font-size: 14px;
+
+  &:focus {
+    outline: none;
+  }
+
+  &:hover {
+    cursor: text;
+  }
+}
+
+@mixin search-style {
+  padding: 10px 15px;
+  margin: 5px;
+  border: $rgb-text-color solid 1px;
+  transition: width 0.2s;
+  font-size: 14px;
+  width: 13em;
+
+  &:hover {
+    width: 20em;
+  }
+
+  &:focus {
+    outline: none;
+  }
+}
+
+@mixin nav-a-style {
+  font-size: 18px;
+  color: $rgb-button-color;
+  padding: 10px 25px 10px 0;
+  font-weight: bold;
+  cursor: pointer;
+  transition: color 0.2s;
+  text-decoration: none;
+
+  &:hover {
+    color: $rgb-text-active;
+  }
+}
+
+@mixin favorite-teacher-style {
+  &.favorite .star {
+    display: block;
+  }
+}
+
+@mixin teacher-block-style {
+  display: flex;
+  flex-direction: column;
+  width: 150px;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  justify-self: center;
+
+  h3, p, small {
+    padding: 0;
+    margin: 0 0 10px 0;
+    text-align: center;
+  }
+
+  p {
+    color: $rgb-text-color;
+  }
+
+  .teacher-img {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    border: 4px solid $rgb-teacher-border-color;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 10px;
+    transition: border-color 0.2s linear;
+
+    .star {
+      position: absolute;
+      top: -10px;
+      right: 0;
+      color: $rgb-star;
+      font-size: 45px;
+      display: none;
+    }
+
+    &:hover {
+      border-color: $rgb-teacher-active-border-color;
+    }
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.2s linear;
+      position: relative;
+      display: block;
+
+      &:hover {
+        transform: scale(1.2);
+      }
+
+      &:hover::after {
+        color: $rgb-teacher-active-border-color;
+      }
+
+      &::after {
+        content: attr(alt);
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 120px;
+        height: 120px;
+        border-radius: 50%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background: $rgb-white;
+        color: $rgb-teacher-border-color;
+        font-size: 24px;
+        font-weight: bold;
+        text-align: center;
+        text-transform: uppercase;
+        line-height: 1;
+        box-sizing: border-box;
+      }
+    }
+  }
+}
+
+
+html {
+  padding: 0;
+  margin: 0;
+
+  body {
+    margin: 0 20%;
+    padding: 25px 5%;
+    box-shadow: -5px 0 10px $rgb-black-alpha, 5px 0 10px $rgb-black-alpha;
+    height: 100%;
+    font-family: $main-font;
+  }
+
+  header {
+    display: flex;
+    justify-content: space-between;
+    padding: 15px 0;
+    align-items: center;
+    margin-bottom: 10px;
+
+    form {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-direction: row;
+    }
+
+    .search-text-area {
+      @include search-style;
+      font-size: 14px;
+    }
+
+    .header-text {
+      font-family: $logo-font;
+      color: $rgb-white;
+      text-shadow: -2px -1px 0 $rgb-logo-light, 2px 1px 0 $rgb-logo-dark;
+      font-size: 45px;
+      margin: 0;
+      transition: text-shadow 0.2s linear;
+
+      &:hover {
+        text-shadow: -3px -2px 0 $rgb-logo-light, 3px 2px 0 $rgb-black;
+        cursor: default;
+      }
+    }
+
+    .search-button {
+      @include button-style;
+      font-size: 14px;
+    }
+
+    label {
+      display: flex;
+      align-items: center;
+    }
+  }
+}
+
+main {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+
+  h2 {
+    align-self: center;
+  }
+
+  hr {
+    width: 65%;
+    margin: 20px 0 20px 0;
+    align-self: center;
+    color: $rgb-black;
+  }
+
+  section {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .filters {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    margin: 5px 0 20px 0;
+
+    font-size: 16px;
+    color: $rgb-text-color;
+
+    .filter-block, .filter-block-extra {
+      display: flex;
+      flex-direction: row;
+      padding-right: 10px;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+
+      @include filter-hover-style;
+    }
+
+    .filter-block {
+      padding-left: 10px;
+      border-left: 2px dotted $rgb-text-color;
+    }
+
+    select {
+      @include select-style;
+    }
+
+    input[type="checkbox"]:hover {
+      cursor: pointer;
+    }
+  }
+
+  .teacher-list {
+    justify-self: center;
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+
+    .teacher-block {
+      @include teacher-block-style;
+      @include favorite-teacher-style;
+    }
+  }
+
+  table {
+    border-collapse: collapse;
+    width: 100%;
+
+    th, td {
+      padding: 5px 10px;
+      text-align: center;
+    }
+
+    th:first-child,
+    td:first-child {
+      text-align: left;
+    }
+
+    thead th {
+      background-color: $rgb-white;
+      border-bottom: 2px solid $rgb-black;
+      font-weight: normal;
+      font-size: 20px;
+      justify-self: center;
+
+      &:hover {
+        background-color: rgb(250, 250, 250);
+        box-shadow: inset 0 -2px 0 0 $rgb-black;
+        cursor: pointer;
+      }
+    }
+
+    tr:nth-child(even) {
+      background-color: $rgb-table-dark;
+    }
+
+    tr:nth-child(odd) {
+      background-color: $rgb-white;
+    }
+  }
+
+  .pagination {
+    text-align: left;
+    margin-top: 20px;
+    color: $rgb-text-color;
+
+    a, span {
+      margin-left: 5px;
+
+      &:hover {
+        font-weight: bolder;
+        color: $rgb-black;
+        cursor: pointer;
+      }
+
+      &.active {
+        color: $rgb-black;
+        cursor: default;
+      }
+    }
+  }
+
+  .favorites-section {
+    .teacher-block {
+      @include teacher-block-style;
+      flex: 0 0 calc(100% / 5);
+    }
+
+    .teachers-scroll-bar {
+      display: flex;
+      overflow: hidden;
+      overflow-x: auto;
+      scroll-behavior: smooth;
+      width: 100%;
+      transition: transform 0.4s ease;
+
+      &::-webkit-scrollbar {
+        display: none;
+      }
+    }
+
+    position: relative;
+    text-align: center;
+
+    .left-arrow,
+    .right-arrow {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 30px;
+      cursor: pointer;
+      transition: filter 0.2s linear;
+
+      &:hover {
+        filter: brightness(0);
+      }
+    }
+
+    .left-arrow {
+      left: -65px;
+    }
+
+    .right-arrow {
+      right: -65px;
+    }
+  }
+}
+
+.nav-section {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+
+  a {
+    @include nav-a-style;
+  }
+
+  .add-teacher-button {
+    @include button-style;
+    font-size: 16px;
+  }
+}
+
+footer {
+  margin-top: 25px;
+
+  p {
+    color: $rgb-text-color;
+    font-size: 14px;
+  }
+}
+
+@mixin dialog-style {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 475px;
+  margin: 0;
+  padding: 0;
+  background-color: $rgb-white;
+  z-index: 1;
+  //display: flex;
+  flex-direction: column;
+  box-shadow: -5px 0 10px $rgb-black-alpha, 5px 0 10px $rgb-black-alpha;
+  border-radius: 3px;
+  border: none;
+}
+
+@mixin dialog-header-style {
+  background: $rgb-dialog-header;
+  color: $rgb-white;
+  display: flex;
+  justify-content: space-between;
+  padding: 10px 15px;
+  align-items: center;
+  border-top-right-radius: 3px;
+  border-top-left-radius: 3px;
+
+  h3 {
+    margin: 0;
+    font-size: 20px;
+    font-weight: normal;
+  }
+
+  .close-button {
+    background: transparent;
+    border: none;
+    color: $rgb-white;
+    cursor: pointer;
+    font-size: 20px;
+  }
+}
+
+.teacher-card-dialog {
+  @include dialog-style;
+  width: 800px;
+  min-height: 450px;
+
+  .teacher-card-dialog-header {
+    @include dialog-header-style;
+    margin-bottom: 0;
+  }
+
+  .teacher-card-main {
+    padding: 15px;
+
+    img {
+      float: left;
+      width: 250px;
+      height: 250px;
+      object-fit: cover;
+    }
+
+    .teacher-info {
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      gap: 8px;
+      padding-left: 35px;
+      margin-bottom: 15px;
+      position: relative;
+
+      span {
+        position: absolute;
+        top: -10px;
+        left: 90%;
+        font-size: 45px;
+        color: $rgb-star;
+
+        &:hover {
+          cursor: pointer;
+
+        }
+      }
+
+      h2 {
+        margin: 5px 0 0 0;
+        font-size: 30px;
+        font-weight: normal;
+      }
+
+      .subject {
+        font-weight: bold;
+        margin: 25px 0 0 0;
+        font-size: 20px;
+      }
+
+      .location, .age-sex, .email, .tel {
+        font-size: 16px;
+        color: $rgb-text-color;
+        margin: 5px 0 0 0;
+        text-decoration: none;
+      }
+
+      .email {
+        color: $rgb-email;
+      }
+    }
+  }
+
+  .teacher-card-footer {
+    padding: 10px 20px 0 20px;
+    font-size: 14px;
+    line-height: 1.4;
+    color: $rgb-text-color;
+
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    word-break: break-word;
+    margin-bottom: 20px;
+  }
+
+  .toggle-map {
+    padding: 0 20px 10px 20px;
+    color: $rgb-email;
+    text-decoration-line: underline;
+    text-decoration-style: dotted;
+    text-decoration-color: $rgb-email;
+
+    &:hover {
+      cursor: pointer;
+    }
+  }
+}
+
+.add-teacher-dialog {
+  @include dialog-style;
+
+  form {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    padding: 0 25px 25px 25px;
+
+    .name-label,
+    .speciality-label,
+    .speciality-label,
+    .country-label,
+    .city-label,
+    .email-label,
+    .phone-label,
+    .date-of-birth-label,
+    .sex-label,
+    .sex-option-label,
+    .color-label,
+    .notes-label {
+      color: $rgb-text-color;
+      font-size: 14px;
+    }
+
+    button {
+      @include button-style;
+      margin: 0;
+      font-size: 22px;
+      padding-top: 15px;
+      padding-bottom: 15px;
+      width: 100%;
+      box-sizing: border-box;
+    }
+
+    select {
+      @include select-style;
+      border-color: $rgb-text-color;
+    }
+
+    input[type="text"],
+    input[type="email"],
+    input[type="tel"],
+    input[type="date"] {
+      @include input-text-style;
+    }
+
+    .name-div,
+    .speciality-div,
+    .sex-div,
+    .color-div,
+    .notes-div,
+    .add-teacher-button {
+      grid-column: span 2;
+    }
+
+    .sex-div {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: flex-start;
+
+      .sex-label {
+        padding-right: 40px;
+      }
+
+      .sex-option-label {
+        color: $rgb-black;
+      }
+
+      .sex-option-input {
+        margin: 0 3px;
+        padding: 0;
+
+        &:hover {
+          cursor: pointer;
+        }
+      }
+
+      .sex-options-label {
+        align-items: center;
+      }
+    }
+
+    .color-div {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-between;
+
+      .color-input:hover {
+        cursor: pointer;
+      }
+    }
+
+    .notes-textarea {
+      resize: vertical;
+      height: 100px;
+      min-height: 100px;
+      border: 1px solid $rgb-text-color;
+    }
+
+    input,
+    select,
+    textarea {
+      margin: 0;
+      padding: 6px;
+      box-sizing: border-box;
+    }
+
+    .name-input,
+    .speciality-select,
+    .country-select,
+    .city-input,
+    .email-input,
+    .phone-input,
+    .notes-textarea, .date-of-birth-input {
+      width: 100%;
+    }
+
+    .sex-div,
+    .color-div {
+      width: 50%;
+    }
+  }
+
+  .add-teacher-dialog-header {
+    @include dialog-header-style;
+  }
+}
+
+
+@media screen and (max-width: 1400px) {
+  html body {
+    margin: 0 10%;
+    box-shadow: none;
+  }
+
+  main .favorites-section {
+    .left-arrow {
+      left: -45px;
+    }
+
+    .right-arrow {
+      right: -45px;
+    }
+  }
+}
+
+@media screen and (max-width: 950px) {
+  html body {
+    margin: 0;
+  }
+
+  main {
+    .teacher-list {
+      grid-template-columns: repeat(3, 1fr);
+    }
+
+    .favorites-section {
+      .teacher-block {
+        flex: 0 0 calc(100% / 3);
+      }
+
+      .left-arrow {
+        left: -15px;
+      }
+
+      .right-arrow {
+        right: -15px;
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 768px) {
+  main {
+    .teacher-list {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    .favorites-section {
+      .teacher-block {
+        flex: 0 0 calc(100% / 2);
+      }
+
+      .left-arrow {
+        left: -15px;
+      }
+
+      .right-arrow {
+        right: -15px;
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 650px) {
+  header {
+    flex-wrap: wrap;
+  }
+  main {
+    .filters {
+      flex-wrap: wrap;
+
+      .filter-block, .filter-block-extra {
+        padding-top: 20px;
+        padding-bottom: 20px;
+      }
+    }
+
+    .nav-section {
+      flex-wrap: wrap;
+    }
+
+    .teacher-list {
+      grid-template-columns: 1fr;
+    }
+
+    .favorites-section {
+      .teacher-block {
+        flex: 0 0 100%;
+      }
+
+      .left-arrow {
+        left: -15px;
+      }
+
+      .right-arrow {
+        right: -15px;
+      }
+    }
+  }
+
+  .teacher-card-dialog {
+    transform: rotate(-90deg);
+    top: 25%;
+    left: 0;
+    min-width: 400px;
+  }
+}

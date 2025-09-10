@@ -1,0 +1,928 @@
+html {
+  padding: 0;
+  margin: 0;
+}
+
+html body {
+  margin: 0 20%;
+  padding: 25px 5%;
+  box-shadow: -5px 0 10px rgba(0, 0, 0, 0.2), 5px 0 10px rgba(0, 0, 0, 0.2);
+  height: 100%;
+  font-family: "Roboto", sans-serif;
+}
+
+html header {
+  display: flex;
+  justify-content: space-between;
+  padding: 15px 0;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+html header form {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-direction: row;
+}
+
+html header .search-text-area {
+  padding: 10px 15px;
+  margin: 5px;
+  border: rgb(102, 102, 102) solid 1px;
+  transition: width 0.2s;
+  font-size: 14px;
+  width: 13em;
+}
+
+html header .search-text-area:hover {
+  width: 20em;
+}
+
+html header .search-text-area:focus {
+  outline: none;
+}
+
+html header .search-text-area {
+  font-size: 14px;
+}
+
+html header .header-text {
+  font-family: Georgia, sans-serif;
+  color: rgb(255, 255, 255);
+  text-shadow: -2px -1px 0 rgb(248, 112, 95), 2px 1px 0 rgb(45, 45, 45);
+  font-size: 45px;
+  margin: 0;
+  transition: text-shadow 0.2s linear;
+}
+
+html header .header-text:hover {
+  text-shadow: -3px -2px 0 rgb(248, 112, 95), 3px 2px 0 rgb(0, 0, 0);
+  cursor: default;
+}
+
+html header .search-button {
+  background-color: rgb(255, 255, 255);
+  border: 1px solid rgb(247, 92, 73);
+  padding: 10px 15px;
+  color: rgb(247, 92, 73);
+  font-weight: bold;
+  cursor: pointer;
+  transition: color 0.2s linear;
+}
+
+html header .search-button:hover {
+  color: rgb(255, 255, 255);
+  background-color: rgb(247, 92, 73);
+}
+
+html header .search-button {
+  font-size: 14px;
+}
+
+html header label {
+  display: flex;
+  align-items: center;
+}
+
+main {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+}
+
+main h2 {
+  align-self: center;
+}
+
+main hr {
+  width: 65%;
+  margin: 20px 0 20px 0;
+  align-self: center;
+  color: rgb(0, 0, 0);
+}
+
+main section {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+main .filters {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  margin: 5px 0 20px 0;
+  font-size: 16px;
+  color: rgb(102, 102, 102);
+}
+
+main .filters .filter-block,
+main .filters .filter-block-extra {
+  display: flex;
+  flex-direction: row;
+  padding-right: 10px;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+main .filters .filter-block:hover,
+main .filters .filter-block-extra:hover {
+  color: rgb(0, 0, 0);
+  cursor: pointer;
+}
+
+main .filters .filter-block {
+  padding-left: 10px;
+  border-left: 2px dotted rgb(102, 102, 102);
+}
+
+main .filters select {
+  border: 1px solid rgb(0, 0, 0);
+  padding: 5px 0;
+}
+
+main .filters select:hover {
+  cursor: pointer;
+}
+
+main .filters input[type=checkbox]:hover {
+  cursor: pointer;
+}
+
+main .teacher-list {
+  justify-self: center;
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+}
+
+main .teacher-list .teacher-block {
+  display: flex;
+  flex-direction: column;
+  width: 150px;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  justify-self: center;
+}
+
+main .teacher-list .teacher-block h3,
+main .teacher-list .teacher-block p,
+main .teacher-list .teacher-block small {
+  padding: 0;
+  margin: 0 0 10px 0;
+  text-align: center;
+}
+
+main .teacher-list .teacher-block p {
+  color: rgb(102, 102, 102);
+}
+
+main .teacher-list .teacher-block .teacher-img {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  border: 4px solid rgb(249, 149, 137);
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 10px;
+  transition: border-color 0.2s linear;
+}
+
+main .teacher-list .teacher-block .teacher-img .star {
+  position: absolute;
+  top: -10px;
+  right: 0;
+  color: rgb(255, 215, 0);
+  font-size: 45px;
+  display: none;
+}
+
+main .teacher-list .teacher-block .teacher-img:hover {
+  border-color: rgb(209, 67, 55);
+}
+
+main .teacher-list .teacher-block .teacher-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.2s linear;
+  position: relative;
+  display: block;
+}
+
+main .teacher-list .teacher-block .teacher-img img:hover {
+  transform: scale(1.2);
+}
+
+main .teacher-list .teacher-block .teacher-img img:hover::after {
+  color: rgb(209, 67, 55);
+}
+
+main .teacher-list .teacher-block .teacher-img img::after {
+  content: attr(alt);
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: rgb(255, 255, 255);
+  color: rgb(249, 149, 137);
+  font-size: 24px;
+  font-weight: bold;
+  text-align: center;
+  text-transform: uppercase;
+  line-height: 1;
+  box-sizing: border-box;
+}
+
+main .teacher-list .teacher-block.favorite .star {
+  display: block;
+}
+
+main table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+main table th,
+main table td {
+  padding: 5px 10px;
+  text-align: center;
+}
+
+main table th:first-child,
+main table td:first-child {
+  text-align: left;
+}
+
+main table thead th {
+  background-color: rgb(255, 255, 255);
+  border-bottom: 2px solid rgb(0, 0, 0);
+  font-weight: normal;
+  font-size: 20px;
+  justify-self: center;
+}
+
+main table thead th:hover {
+  background-color: rgb(250, 250, 250);
+  box-shadow: inset 0 -2px 0 0 rgb(0, 0, 0);
+  cursor: pointer;
+}
+
+main table tr:nth-child(even) {
+  background-color: rgb(249, 245, 249);
+}
+
+main table tr:nth-child(odd) {
+  background-color: rgb(255, 255, 255);
+}
+
+main .pagination {
+  text-align: left;
+  margin-top: 20px;
+  color: rgb(102, 102, 102);
+}
+
+main .pagination a,
+main .pagination span {
+  margin-left: 5px;
+}
+
+main .pagination a:hover,
+main .pagination span:hover {
+  font-weight: bolder;
+  color: rgb(0, 0, 0);
+  cursor: pointer;
+}
+
+main .pagination a.active,
+main .pagination span.active {
+  color: rgb(0, 0, 0);
+  cursor: default;
+}
+
+main .favorites-section .teacher-block {
+  display: flex;
+  flex-direction: column;
+  width: 150px;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  justify-self: center;
+}
+
+main .favorites-section .teacher-block h3,
+main .favorites-section .teacher-block p,
+main .favorites-section .teacher-block small {
+  padding: 0;
+  margin: 0 0 10px 0;
+  text-align: center;
+}
+
+main .favorites-section .teacher-block p {
+  color: rgb(102, 102, 102);
+}
+
+main .favorites-section .teacher-block .teacher-img {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  border: 4px solid rgb(249, 149, 137);
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 10px;
+  transition: border-color 0.2s linear;
+}
+
+main .favorites-section .teacher-block .teacher-img .star {
+  position: absolute;
+  top: -10px;
+  right: 0;
+  color: rgb(255, 215, 0);
+  font-size: 45px;
+  display: none;
+}
+
+main .favorites-section .teacher-block .teacher-img:hover {
+  border-color: rgb(209, 67, 55);
+}
+
+main .favorites-section .teacher-block .teacher-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.2s linear;
+  position: relative;
+  display: block;
+}
+
+main .favorites-section .teacher-block .teacher-img img:hover {
+  transform: scale(1.2);
+}
+
+main .favorites-section .teacher-block .teacher-img img:hover::after {
+  color: rgb(209, 67, 55);
+}
+
+main .favorites-section .teacher-block .teacher-img img::after {
+  content: attr(alt);
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: rgb(255, 255, 255);
+  color: rgb(249, 149, 137);
+  font-size: 24px;
+  font-weight: bold;
+  text-align: center;
+  text-transform: uppercase;
+  line-height: 1;
+  box-sizing: border-box;
+}
+
+main .favorites-section .teacher-block {
+  flex: 0 0 20%;
+}
+
+main .favorites-section .teachers-scroll-bar {
+  display: flex;
+  overflow: hidden;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  width: 100%;
+  transition: transform 0.4s ease;
+}
+
+main .favorites-section .teachers-scroll-bar::-webkit-scrollbar {
+  display: none;
+}
+
+main .favorites-section {
+  position: relative;
+  text-align: center;
+}
+
+main .favorites-section .left-arrow,
+main .favorites-section .right-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 30px;
+  cursor: pointer;
+  transition: filter 0.2s linear;
+}
+
+main .favorites-section .left-arrow:hover,
+main .favorites-section .right-arrow:hover {
+  filter: brightness(0);
+}
+
+main .favorites-section .left-arrow {
+  left: -65px;
+}
+
+main .favorites-section .right-arrow {
+  right: -65px;
+}
+
+.nav-section {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+.nav-section a {
+  font-size: 18px;
+  color: rgb(247, 92, 73);
+  padding: 10px 25px 10px 0;
+  font-weight: bold;
+  cursor: pointer;
+  transition: color 0.2s;
+  text-decoration: none;
+}
+
+.nav-section a:hover {
+  color: rgb(213, 71, 69);
+}
+
+.nav-section .add-teacher-button {
+  background-color: rgb(255, 255, 255);
+  border: 1px solid rgb(247, 92, 73);
+  padding: 10px 15px;
+  color: rgb(247, 92, 73);
+  font-weight: bold;
+  cursor: pointer;
+  transition: color 0.2s linear;
+}
+
+.nav-section .add-teacher-button:hover {
+  color: rgb(255, 255, 255);
+  background-color: rgb(247, 92, 73);
+}
+
+.nav-section .add-teacher-button {
+  font-size: 16px;
+}
+
+footer {
+  margin-top: 25px;
+}
+
+footer p {
+  color: rgb(102, 102, 102);
+  font-size: 14px;
+}
+
+.teacher-card-dialog {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 475px;
+  margin: 0;
+  padding: 0;
+  background-color: rgb(255, 255, 255);
+  z-index: 1;
+  flex-direction: column;
+  box-shadow: -5px 0 10px rgba(0, 0, 0, 0.2), 5px 0 10px rgba(0, 0, 0, 0.2);
+  border-radius: 3px;
+  border: none;
+  width: 800px;
+  min-height: 450px;
+}
+
+.teacher-card-dialog .teacher-card-dialog-header {
+  background: rgb(70, 70, 72);
+  color: rgb(255, 255, 255);
+  display: flex;
+  justify-content: space-between;
+  padding: 10px 15px;
+  align-items: center;
+  border-top-right-radius: 3px;
+  border-top-left-radius: 3px;
+}
+
+.teacher-card-dialog .teacher-card-dialog-header h3 {
+  margin: 0;
+  font-size: 20px;
+  font-weight: normal;
+}
+
+.teacher-card-dialog .teacher-card-dialog-header .close-button {
+  background: transparent;
+  border: none;
+  color: rgb(255, 255, 255);
+  cursor: pointer;
+  font-size: 20px;
+}
+
+.teacher-card-dialog .teacher-card-dialog-header {
+  margin-bottom: 0;
+}
+
+.teacher-card-dialog .teacher-card-main {
+  padding: 15px;
+}
+
+.teacher-card-dialog .teacher-card-main img {
+  float: left;
+  width: 250px;
+  height: 250px;
+  object-fit: cover;
+}
+
+.teacher-card-dialog .teacher-card-main .teacher-info {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  gap: 8px;
+  padding-left: 35px;
+  margin-bottom: 15px;
+  position: relative;
+}
+
+.teacher-card-dialog .teacher-card-main .teacher-info span {
+  position: absolute;
+  top: -10px;
+  left: 90%;
+  font-size: 45px;
+  color: rgb(255, 215, 0);
+}
+
+.teacher-card-dialog .teacher-card-main .teacher-info span:hover {
+  cursor: pointer;
+}
+
+.teacher-card-dialog .teacher-card-main .teacher-info h2 {
+  margin: 5px 0 0 0;
+  font-size: 30px;
+  font-weight: normal;
+}
+
+.teacher-card-dialog .teacher-card-main .teacher-info .subject {
+  font-weight: bold;
+  margin: 25px 0 0 0;
+  font-size: 20px;
+}
+
+.teacher-card-dialog .teacher-card-main .teacher-info .location,
+.teacher-card-dialog .teacher-card-main .teacher-info .age-sex,
+.teacher-card-dialog .teacher-card-main .teacher-info .email,
+.teacher-card-dialog .teacher-card-main .teacher-info .tel {
+  font-size: 16px;
+  color: rgb(102, 102, 102);
+  margin: 5px 0 0 0;
+  text-decoration: none;
+}
+
+.teacher-card-dialog .teacher-card-main .teacher-info .email {
+  color: rgb(135, 211, 224);
+}
+
+.teacher-card-dialog .teacher-card-footer {
+  padding: 10px 20px 0 20px;
+  font-size: 14px;
+  line-height: 1.4;
+  color: rgb(102, 102, 102);
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  word-break: break-word;
+  margin-bottom: 20px;
+}
+
+.teacher-card-dialog .toggle-map {
+  padding: 0 20px 10px 20px;
+  color: rgb(135, 211, 224);
+  text-decoration-line: underline;
+  text-decoration-style: dotted;
+  text-decoration-color: rgb(135, 211, 224);
+}
+
+.teacher-card-dialog .toggle-map:hover {
+  cursor: pointer;
+}
+
+.add-teacher-dialog {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 475px;
+  margin: 0;
+  padding: 0;
+  background-color: rgb(255, 255, 255);
+  z-index: 1;
+  flex-direction: column;
+  box-shadow: -5px 0 10px rgba(0, 0, 0, 0.2), 5px 0 10px rgba(0, 0, 0, 0.2);
+  border-radius: 3px;
+  border: none;
+}
+
+.add-teacher-dialog form {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  padding: 0 25px 25px 25px;
+}
+
+.add-teacher-dialog form .name-label,
+.add-teacher-dialog form .speciality-label,
+.add-teacher-dialog form .speciality-label,
+.add-teacher-dialog form .country-label,
+.add-teacher-dialog form .city-label,
+.add-teacher-dialog form .email-label,
+.add-teacher-dialog form .phone-label,
+.add-teacher-dialog form .date-of-birth-label,
+.add-teacher-dialog form .sex-label,
+.add-teacher-dialog form .sex-option-label,
+.add-teacher-dialog form .color-label,
+.add-teacher-dialog form .notes-label {
+  color: rgb(102, 102, 102);
+  font-size: 14px;
+}
+
+.add-teacher-dialog form button {
+  background-color: rgb(255, 255, 255);
+  border: 1px solid rgb(247, 92, 73);
+  padding: 10px 15px;
+  color: rgb(247, 92, 73);
+  font-weight: bold;
+  cursor: pointer;
+  transition: color 0.2s linear;
+}
+
+.add-teacher-dialog form button:hover {
+  color: rgb(255, 255, 255);
+  background-color: rgb(247, 92, 73);
+}
+
+.add-teacher-dialog form button {
+  margin: 0;
+  font-size: 22px;
+  padding-top: 15px;
+  padding-bottom: 15px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.add-teacher-dialog form select {
+  border: 1px solid rgb(0, 0, 0);
+  padding: 5px 0;
+}
+
+.add-teacher-dialog form select:hover {
+  cursor: pointer;
+}
+
+.add-teacher-dialog form select {
+  border-color: rgb(102, 102, 102);
+}
+
+.add-teacher-dialog form input[type=text],
+.add-teacher-dialog form input[type=email],
+.add-teacher-dialog form input[type=tel],
+.add-teacher-dialog form input[type=date] {
+  border: rgb(102, 102, 102) solid 1px;
+  padding: 6px;
+  font-size: 14px;
+}
+
+.add-teacher-dialog form input[type=text]:focus,
+.add-teacher-dialog form input[type=email]:focus,
+.add-teacher-dialog form input[type=tel]:focus,
+.add-teacher-dialog form input[type=date]:focus {
+  outline: none;
+}
+
+.add-teacher-dialog form input[type=text]:hover,
+.add-teacher-dialog form input[type=email]:hover,
+.add-teacher-dialog form input[type=tel]:hover,
+.add-teacher-dialog form input[type=date]:hover {
+  cursor: text;
+}
+
+.add-teacher-dialog form .name-div,
+.add-teacher-dialog form .speciality-div,
+.add-teacher-dialog form .sex-div,
+.add-teacher-dialog form .color-div,
+.add-teacher-dialog form .notes-div,
+.add-teacher-dialog form .add-teacher-button {
+  grid-column: span 2;
+}
+
+.add-teacher-dialog form .sex-div {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.add-teacher-dialog form .sex-div .sex-label {
+  padding-right: 40px;
+}
+
+.add-teacher-dialog form .sex-div .sex-option-label {
+  color: rgb(0, 0, 0);
+}
+
+.add-teacher-dialog form .sex-div .sex-option-input {
+  margin: 0 3px;
+  padding: 0;
+}
+
+.add-teacher-dialog form .sex-div .sex-option-input:hover {
+  cursor: pointer;
+}
+
+.add-teacher-dialog form .sex-div .sex-options-label {
+  align-items: center;
+}
+
+.add-teacher-dialog form .color-div {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.add-teacher-dialog form .color-div .color-input:hover {
+  cursor: pointer;
+}
+
+.add-teacher-dialog form .notes-textarea {
+  resize: vertical;
+  height: 100px;
+  min-height: 100px;
+  border: 1px solid rgb(102, 102, 102);
+}
+
+.add-teacher-dialog form input,
+.add-teacher-dialog form select,
+.add-teacher-dialog form textarea {
+  margin: 0;
+  padding: 6px;
+  box-sizing: border-box;
+}
+
+.add-teacher-dialog form .name-input,
+.add-teacher-dialog form .speciality-select,
+.add-teacher-dialog form .country-select,
+.add-teacher-dialog form .city-input,
+.add-teacher-dialog form .email-input,
+.add-teacher-dialog form .phone-input,
+.add-teacher-dialog form .notes-textarea,
+.add-teacher-dialog form .date-of-birth-input {
+  width: 100%;
+}
+
+.add-teacher-dialog form .sex-div,
+.add-teacher-dialog form .color-div {
+  width: 50%;
+}
+
+.add-teacher-dialog .add-teacher-dialog-header {
+  background: rgb(70, 70, 72);
+  color: rgb(255, 255, 255);
+  display: flex;
+  justify-content: space-between;
+  padding: 10px 15px;
+  align-items: center;
+  border-top-right-radius: 3px;
+  border-top-left-radius: 3px;
+}
+
+.add-teacher-dialog .add-teacher-dialog-header h3 {
+  margin: 0;
+  font-size: 20px;
+  font-weight: normal;
+}
+
+.add-teacher-dialog .add-teacher-dialog-header .close-button {
+  background: transparent;
+  border: none;
+  color: rgb(255, 255, 255);
+  cursor: pointer;
+  font-size: 20px;
+}
+
+@media screen and (max-width: 1400px) {
+  html body {
+    margin: 0 10%;
+    box-shadow: none;
+  }
+
+  main .favorites-section .left-arrow {
+    left: -45px;
+  }
+
+  main .favorites-section .right-arrow {
+    right: -45px;
+  }
+}
+
+@media screen and (max-width: 950px) {
+  html body {
+    margin: 0;
+  }
+
+  main .teacher-list {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  main .favorites-section .teacher-block {
+    flex: 0 0 33.3333333333%;
+  }
+
+  main .favorites-section .left-arrow {
+    left: -15px;
+  }
+
+  main .favorites-section .right-arrow {
+    right: -15px;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  main .teacher-list {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  main .favorites-section .teacher-block {
+    flex: 0 0 50%;
+  }
+
+  main .favorites-section .left-arrow {
+    left: -15px;
+  }
+
+  main .favorites-section .right-arrow {
+    right: -15px;
+  }
+}
+
+@media screen and (max-width: 650px) {
+  header {
+    flex-wrap: wrap;
+  }
+
+  main .filters {
+    flex-wrap: wrap;
+  }
+
+  main .filters .filter-block,
+  main .filters .filter-block-extra {
+    padding-top: 20px;
+    padding-bottom: 20px;
+  }
+
+  main .nav-section {
+    flex-wrap: wrap;
+  }
+
+  main .teacher-list {
+    grid-template-columns: 1fr;
+  }
+
+  main .favorites-section .teacher-block {
+    flex: 0 0 100%;
+  }
+
+  main .favorites-section .left-arrow {
+    left: -15px;
+  }
+
+  main .favorites-section .right-arrow {
+    right: -15px;
+  }
+
+  .teacher-card-dialog {
+    transform: rotate(-90deg);
+    top: 25%;
+    left: 0;
+    min-width: 400px;
+  }
+}
+
+/*# sourceMappingURL=main.css.map */
