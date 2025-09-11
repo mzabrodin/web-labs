@@ -243,7 +243,7 @@ html {
 main {
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
+  align-items: center;
   justify-content: center;
 
   h2 {
@@ -483,7 +483,7 @@ footer {
 
 .teacher-card-dialog {
   @include dialog-style;
-  width: 800px;
+  width: 40%;
   min-height: 450px;
 
   .teacher-card-dialog-header {
@@ -507,7 +507,6 @@ footer {
       justify-content: flex-start;
       gap: 8px;
       padding-left: 35px;
-      margin-bottom: 15px;
       position: relative;
 
       span {
@@ -553,6 +552,7 @@ footer {
     font-size: 14px;
     line-height: 1.4;
     color: $rgb-text-color;
+    clear: left;
 
     display: -webkit-box;
     -webkit-box-orient: vertical;
@@ -578,6 +578,7 @@ footer {
 
 .add-teacher-dialog {
   @include dialog-style;
+  width: 30%;
 
   form {
     display: grid;
@@ -637,6 +638,7 @@ footer {
       flex-direction: row;
       align-items: center;
       justify-content: flex-start;
+
 
       .sex-label {
         padding-right: 40px;
@@ -723,6 +725,14 @@ footer {
       right: -45px;
     }
   }
+
+  .add-teacher-dialog {
+    width: 45%;
+  }
+
+  .teacher-card-dialog {
+    width: 75%;
+  }
 }
 
 @media screen and (max-width: 950px) {
@@ -771,6 +781,28 @@ footer {
       }
     }
   }
+
+  .add-teacher-dialog {
+    width: 75%;
+  }
+
+  .teacher-card-dialog {
+    width: 80%;
+
+    .teacher-card-main {
+      justify-content: center;
+      align-items: center;
+    }
+
+    .teacher-card-main .teacher-info {
+      padding: 30px;
+    }
+
+    .teacher-card-main img {
+      justify-self: center;
+      float: none;
+    }
+  }
 }
 
 @media screen and (max-width: 650px) {
@@ -808,12 +840,5 @@ footer {
         right: -15px;
       }
     }
-  }
-
-  .teacher-card-dialog {
-    transform: rotate(-90deg);
-    top: 25%;
-    left: 0;
-    min-width: 400px;
   }
 }
