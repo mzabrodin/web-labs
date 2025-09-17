@@ -1,0 +1,35 @@
+const sortFields = ['full_name', 'age', 'b_date', 'country'];
+
+function sortUsers(users, key, ascending = true) {
+  if (!sortFields.includes(key)) {
+    return users;
+  }
+
+  return users.slice()
+    .sort((a, b) => {
+      let valueA = a[key];
+      let valueB = b[key];
+
+      if (key === 'b_date') {
+        valueA = new Date(valueA).getTime();
+        valueB = new Date(valueB).getTime();
+      }
+
+      if (typeof valueA === 'string' && typeof valueB === 'string') {
+        valueA = valueA.toLowerCase();
+        valueB = valueB.toLowerCase();
+      }
+
+      if (valueA < valueB) {
+        return ascending ? -1 : 1;
+      }
+
+      if (valueA > valueB) {
+        return ascending ? 1 : -1;
+      }
+
+      return 0;
+    });
+}
+
+export default sortUsers;
