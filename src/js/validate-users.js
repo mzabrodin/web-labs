@@ -22,7 +22,7 @@ function isValidPhone(phone) {
 }
 
 function fixUser(user) {
-  const fixedUser = { ...user };
+  const fixedUser = structuredClone(user);
 
   if (typeof fixedUser.gender === 'string') {
     fixedUser.gender = capitalize(fixedUser.gender);

@@ -143,7 +143,7 @@ function finalizeUser(user) {
 }
 
 function mergeUsers(firstArray, secondArray) {
-  const allUsers = [...firstArray, ...secondArray];
+  const allUsers = structuredClone([...firstArray, ...secondArray]);
   const processed = [];
 
   allUsers.forEach((user) => {

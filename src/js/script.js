@@ -8,29 +8,34 @@ import calculatePercentage from './percentage-users.js';
 
 const users = validateUsers(mergeUsers(randomUserMock, additionalUsers));
 
+console.log('all users after merge and validation:');
 console.log(users);
-console.log(`all users before merge and validation: ${randomUserMock.length + additionalUsers.length}`);
-console.log(`users after${users.length}`);
+console.log(`all users length: ${randomUserMock.length + additionalUsers.length}`);
+console.log(`users length after ${users.length}`);
 
 const filtered = filterUsers(users, {
   country: 'United States',
   age: {
     min: 20,
-    max: 80,
+    max: 30,
   },
-  gender: 'Male',
-  favorite: false,
+  gender: 'Female',
 });
 
+console.log('filtered:');
 console.log(filtered);
-console.log(filtered.length);
+console.log(`filtered.length: ${filtered.length}`);
 
-const sorted = sortUsers(users, 'country', true);
+const sorted = sortUsers(users, 'age', false);
+console.log('sorted:');
 console.log(sorted);
 
-const searched = searchUsers(users, 'full_name', 'No');
+const searched = searchUsers(users, 'full_name', 'Claude');
+console.log('searched:');
 console.log(searched);
-console.log(searched.length);
+console.log(`searched.length: ${searched.length}`);
 
-const percentage = calculatePercentage(users, 'age', '>= 75');
-console.log(`percentage of users with age >= 75: ${percentage}%`);
+const searchField = 'age';
+const searchValue = '>30';
+const percentage = calculatePercentage(users, searchField, searchValue);
+console.log(`percentage of users with ${searchField} ${searchValue}: ${percentage}%`);
