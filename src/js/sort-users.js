@@ -11,8 +11,8 @@ function sortUsers(users, key, ascending = true) {
       let valueB = b[key];
 
       if (key === 'b_date') {
-        valueA = new Date(valueA).getTime();
-        valueB = new Date(valueB).getTime();
+        valueA = new Date(valueA);
+        valueB = new Date(valueB);
       }
 
       if (typeof valueA === 'string' && typeof valueB === 'string') {
