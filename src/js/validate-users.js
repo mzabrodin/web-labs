@@ -3,8 +3,11 @@ function capitalize(str) {
     return str;
   }
 
-  return str.charAt(0)
-    .toUpperCase() + str.slice(1);
+  return str
+    .split('-')
+    .map(w => w.charAt(0)
+      .toLocaleUpperCase() + w.slice(1))
+    .join('-');
 }
 
 function isValidEmail(email) {
@@ -21,12 +24,13 @@ function isValidPhone(phone) {
   return phoneRegex.test(phone);
 }
 
-function fixUser(user) {
+export function fixUser(user) {
   const fixedUser = structuredClone(user);
 
   if (typeof fixedUser.gender === 'string') {
     fixedUser.gender = capitalize(fixedUser.gender);
   }
+
   if (typeof fixedUser.full_name === 'string') {
     fixedUser.full_name = fixedUser.full_name
       .split(' ')
@@ -56,7 +60,7 @@ function fixUser(user) {
   return fixedUser;
 }
 
-function validateUser(user) {
+export function validateUser(user) {
   const errors = [];
 
   if (!isCapitalized(user.full_name)) {
@@ -93,18 +97,16 @@ function validateUser(user) {
   };
 }
 
-function validateUsers(users) {
+export function validateUsers(users) {
   return users
     .map((user) => {
       const fixedUser = fixUser(user);
       const result = validateUser(fixedUser);
       if (!result.valid) {
-        console.error(`user ${fixedUser.full_name} is invalid:`, result.errors);
+        //console.error(`user ${fixedUser.full_name} is invalid:`, result.errors);
         return null;
       }
       return fixedUser;
     })
     .filter((u) => u !== null);
 }
-
-export default validateUsers;

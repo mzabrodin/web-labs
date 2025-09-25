@@ -93,7 +93,7 @@ function isDuplicate(firstUser, secondUser) {
 }
 
 function mergeUserData(firstUser, secondUser) {
-  const mergedUser = { ...firstUser };
+  const mergedUser = structuredClone(firstUser);
 
   Object.keys(secondUser)
     .forEach((key) => {

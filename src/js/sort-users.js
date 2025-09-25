@@ -1,4 +1,4 @@
-const sortFields = ['full_name', 'age', 'b_date', 'country'];
+const sortFields = ['full_name', 'age', 'b_date', 'country', 'course', 'gender'];
 
 function sortUsers(users, key, ascending = true) {
   if (!sortFields.includes(key)) {
@@ -16,8 +16,8 @@ function sortUsers(users, key, ascending = true) {
       }
 
       if (typeof valueA === 'string' && typeof valueB === 'string') {
-        valueA = valueA.toLowerCase();
-        valueB = valueB.toLowerCase();
+        valueA = valueA.toLocaleLowerCase();
+        valueB = valueB.toLocaleLowerCase();
       }
 
       if (valueA < valueB) {
