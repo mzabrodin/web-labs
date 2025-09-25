@@ -1,4 +1,4 @@
-const sortFields = ['full_name', 'age', 'b_date', 'country'];
+const sortFields = ['full_name', 'age', 'b_date', 'country', 'course', 'gender'];
 
 function sortUsers(users, key, ascending = true) {
   if (!sortFields.includes(key)) {
@@ -11,13 +11,13 @@ function sortUsers(users, key, ascending = true) {
       let valueB = b[key];
 
       if (key === 'b_date') {
-        valueA = new Date(valueA).getTime();
-        valueB = new Date(valueB).getTime();
+        valueA = new Date(valueA);
+        valueB = new Date(valueB);
       }
 
       if (typeof valueA === 'string' && typeof valueB === 'string') {
-        valueA = valueA.toLowerCase();
-        valueB = valueB.toLowerCase();
+        valueA = valueA.toLocaleLowerCase();
+        valueB = valueB.toLocaleLowerCase();
       }
 
       if (valueA < valueB) {
