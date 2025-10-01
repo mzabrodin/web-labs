@@ -1,0 +1,32 @@
+{
+  "teachers": [
+    {
+      "id": "744ae492-0b38-4521-b52a-b2e0992609d9",
+      "title": "Mr",
+      "full_name": "Maksym Zabrodin",
+      "gender": "Male",
+      "course": "Mathematics",
+      "country": "Ukraine",
+      "city": "Kyiv",
+      "state": "Kyiv",
+      "postcode": "",
+      "coordinates": {
+        "latitude": null,
+        "longitude": null
+      },
+      "timezone": {
+        "offset": null,
+        "description": null
+      },
+      "email": "m.zavroin@gmail.com",
+      "b_date": "2001-12-09",
+      "age": 24,
+      "phone": "123456789",
+      "picture_large": null,
+      "picture_thumbnail": null,
+      "favorite": false,
+      "bg_color": "#6a5858",
+      "note": "Asfdbgdf"
+    }
+  ]
+}

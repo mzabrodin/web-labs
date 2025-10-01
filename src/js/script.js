@@ -4,13 +4,12 @@ import { fixUser, validateUser, validateUsers } from './validate-users.js';
 import filterUsers from './filter-users.js';
 import sortUsers from './sort-users.js';
 import searchUsers from './search-users.js';
+import { fetchRandomUsersInit, fetchToExistingUsers } from './fetchFromAPI.js';
 
-document.addEventListener('DOMContentLoaded', () => {
-
+document.addEventListener('DOMContentLoaded', async () => {
   //region data
-  const users = validateUsers(mergeUsers(randomUserMock, additionalUsers));
-  const originalStatsUsers = structuredClone(users);
-  let statsUsers = [...originalStatsUsers];
+  const users = await fetchRandomUsersInit();
+  let statsUsers = [...users];
 
   const tableKeys = {
     'table-name': 'full_name',
@@ -19,7 +18,7 @@ document.addEventListener('DOMContentLoaded', () => {
     'table-gender': 'gender',
     'table-nationality': 'country',
   };
-  //endregion
+//endregion
 
   //region elements
   const wrapper = document.querySelector('.wrapper');
@@ -55,10 +54,26 @@ document.addEventListener('DOMContentLoaded', () => {
   //region states
   const sortState = {};
   let currentPage = 1;
-  const rowsPerPage = 15;
+  const rowsPerPage = 10;
   //endregion
 
   //region extension functions
+  function resetTableSorting() {
+    Object.keys(sortState)
+      .forEach(k => sortState[k] = 'none');
+    renderSortArrows();
+
+    ageSelect.value = '';
+    regionSelect.value = '';
+    sexSelect.value = '';
+    photoCheckbox.checked = false;
+    favoritesCheckbox.checked = false;
+    searchInput.value = '';
+
+    statsUsers = [...users];
+    renderStatisticsPage(statsUsers);
+  }
+
   function getScrollAmount() {
     const firstBlock = teacherFavorites.querySelector('.teacher-block');
     return firstBlock ? firstBlock.offsetWidth : 200;
@@ -99,7 +114,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function openTeacherDialog(user) {
-    teacherCardDialog.querySelector('img').src = user.picture_large || "https://cdn.pixabay.com/photo/2023/02/18/11/00/icon-7797704_640.png";
+    teacherCardDialog.querySelector('img').src = user.picture_large || 'https://cdn.pixabay.com/photo/2023/02/18/11/00/icon-7797704_640.png';
     teacherCardDialog.querySelector('h2').textContent = user.full_name;
     teacherCardDialog.querySelector('.subject').textContent = user.course;
     teacherCardDialog.querySelector('.location').textContent = `${user.city}, ${user.country}`;
@@ -203,16 +218,54 @@ document.addEventListener('DOMContentLoaded', () => {
     const totalPages = Math.ceil(totalRows / rowsPerPage);
     pagination.innerHTML = '';
 
-    for (let i = 1; i <= totalPages; i++) {
+    const createPageButton = (pageNum, text = null) => {
       const a = document.createElement('a');
-      a.textContent = i.toString();
-      if (i === currentPage) {
+      a.textContent = text || pageNum;
+      a.dataset.page = pageNum;
+      if (pageNum === currentPage) {
         a.classList.add('active');
       }
+      return a;
+    };
 
-      a.dataset.page = i.toString();
-      pagination.appendChild(a);
+    const prev = createPageButton(currentPage - 1, 'Prev');
+    if (currentPage === 1) {
+      prev.classList.add('disabled');
     }
+    pagination.appendChild(prev);
+
+    let startPage = Math.max(1, currentPage - 1);
+    let endPage = Math.min(totalPages, startPage + 2);
+
+    if (endPage - startPage < 3) {
+      startPage = Math.max(1, endPage - 2);
+    }
+
+    if (startPage > 1) {
+      pagination.appendChild(createPageButton(1));
+      if (startPage > 2) {
+        const span = document.createElement('span');
+        span.textContent = '...';
+        pagination.appendChild(span);
+      }
+    }
+
+    for (let i = startPage; i <= endPage; i++) {
+      pagination.appendChild(createPageButton(i));
+    }
+
+    if (endPage < totalPages) {
+      if (endPage < totalPages - 1) {
+        const span = document.createElement('span');
+        span.textContent = '...';
+        pagination.appendChild(span);
+      }
+      pagination.appendChild(createPageButton(totalPages));
+    }
+
+    const next = createPageButton(currentPage + 1, 'Next');
+    if (currentPage === totalPages) next.classList.add('disabled');
+    pagination.appendChild(next);
   }
 
   function renderSortArrows() {
@@ -249,6 +302,7 @@ document.addEventListener('DOMContentLoaded', () => {
       rightArrow.style.display = 'block';
     }
   }
+
   //endregion
 
   //region filter and search
@@ -277,8 +331,12 @@ document.addEventListener('DOMContentLoaded', () => {
       filtered = searchUsers(filtered, searchValue);
     }
 
+    statsUsers = [...filtered];
+    currentPage = 1;
+    renderStatisticsPage(statsUsers);
     renderTeacherList(filtered);
   }
+
   //endregion
 
   //region events
@@ -315,7 +373,7 @@ document.addEventListener('DOMContentLoaded', () => {
     dialogStar.textContent = user.favorite ? '★' : '☆';
     applyFiltersAndSearch();
     renderFavorites(users);
-    renderFavoritesArrows()
+    renderFavoritesArrows();
   });
 
   teacherCardDialog.querySelector('.close-button')
@@ -349,23 +407,33 @@ document.addEventListener('DOMContentLoaded', () => {
         }
       });
 
-    statsUsers = next === 'none' ? [...originalStatsUsers] : sortUsers([...originalStatsUsers], key, next === 'asc');
+    statsUsers = next === 'none' ? [...users] : sortUsers([...statsUsers], key, next === 'asc');
     renderStatisticsPage(statsUsers);
   });
 
-  pagination.addEventListener('click', (e) => {
+  pagination.addEventListener('click', async (e) => {
     const a = e.target.closest('a');
     if (!a) {
       return;
     }
 
     const page = parseInt(a.dataset.page);
-    if (!page) {
-      return;
+    if (!page || page === currentPage) return;
+
+    const totalPages = Math.ceil(statsUsers.length / rowsPerPage);
+    if (page > totalPages) {
+      statsUsers = await fetchToExistingUsers(statsUsers, 10);
+      users.push(...statsUsers.slice(-10));
+      populateRegions(users);
+      renderTeacherList(users);
+      renderFavorites(users);
+      resetTableSorting();
     }
 
     currentPage = page;
     renderStatisticsPage(statsUsers);
+    const statisticsSection = document.getElementById('statistics');
+    statisticsSection.scrollIntoView();
   });
 
   addTeacherOpenBtn.forEach(el => {
@@ -384,7 +452,7 @@ document.addEventListener('DOMContentLoaded', () => {
     wrapper.style.filter = 'blur(0px)';
   });
 
-  addTeacherForm.addEventListener('submit', e => {
+  addTeacherForm.addEventListener('submit', async e => {
     e.preventDefault();
 
     const formData = new FormData(addTeacherForm);
@@ -508,19 +576,31 @@ document.addEventListener('DOMContentLoaded', () => {
       return;
     }
 
-    users.push(fixedUser);
-    originalStatsUsers.push({ ...fixedUser });
-    statsUsers = [...originalStatsUsers];
+    try {
+      const response = await fetch('http://localhost:3002/teachers', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(fixedUser)
+      });
 
-    renderTeacherList(users);
-    renderFavorites(users);
-    renderStatisticsPage(statsUsers);
+      if (!response.ok) {
+        new Error('Failed to add teacher');
+      }
 
-    addTeacherForm.reset();
-    addTeacherDialog.close();
-    wrapper.style.filter = 'blur(0px)';
+      const savedTeacher = await response.json();
+      console.log('Added:', savedTeacher);
 
-    populateRegions();
+      users.push(fixedUser);
+      applyFiltersAndSearch();
+      renderFavorites(users);
+      addTeacherForm.reset();
+      addTeacherDialog.close();
+      wrapper.style.filter = 'blur(0px)';
+      populateRegions(users);
+
+    } catch (err) {
+      alert(err.message);
+    }
   });
 
   leftArrow.addEventListener('click', () => {
@@ -545,5 +625,6 @@ document.addEventListener('DOMContentLoaded', () => {
   renderTeacherList(users);
   renderFavorites(users);
   renderStatisticsPage(statsUsers);
+  renderFavoritesArrows();
   //endregion
 });

@@ -372,6 +372,7 @@ main {
       &.active {
         color: $rgb-black;
         cursor: default;
+        font-weight: bold;
       }
     }
   }
