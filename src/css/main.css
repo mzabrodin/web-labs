@@ -263,6 +263,7 @@ main .pagination a:hover, main .pagination span:hover {
 main .pagination a.active, main .pagination span.active {
   color: rgb(0, 0, 0);
   cursor: default;
+  font-weight: bold;
 }
 main .favorites-section .teacher-block {
   display: flex;
