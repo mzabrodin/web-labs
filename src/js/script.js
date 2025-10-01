@@ -172,6 +172,8 @@ document.addEventListener('DOMContentLoaded', () => {
         <small>${user.country}</small>
       `;
       teacherFavorites.appendChild(favBlock);
+
+      renderFavoritesArrows();
     });
   }
 
@@ -233,6 +235,19 @@ document.addEventListener('DOMContentLoaded', () => {
         th.appendChild(span);
       }
     });
+  }
+
+  function renderFavoritesArrows() {
+    const leftArrow = document.querySelector('.left-arrow');
+    const rightArrow = document.querySelector('.right-arrow');
+
+    if (teacherFavorites.children.length === 0) {
+      leftArrow.style.display = 'none';
+      rightArrow.style.display = 'none';
+    } else {
+      leftArrow.style.display = 'block';
+      rightArrow.style.display = 'block';
+    }
   }
   //endregion
 
@@ -300,6 +315,7 @@ document.addEventListener('DOMContentLoaded', () => {
     dialogStar.textContent = user.favorite ? '★' : '☆';
     applyFiltersAndSearch();
     renderFavorites(users);
+    renderFavoritesArrows()
   });
 
   teacherCardDialog.querySelector('.close-button')
@@ -503,6 +519,8 @@ document.addEventListener('DOMContentLoaded', () => {
     addTeacherForm.reset();
     addTeacherDialog.close();
     wrapper.style.filter = 'blur(0px)';
+
+    populateRegions();
   });
 
   leftArrow.addEventListener('click', () => {
