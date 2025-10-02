@@ -13,7 +13,7 @@ export async function fetchRandomUsersInit() {
       });
 
       if (!response.ok) {
-        new Error(`HTTP error: ${response.status}`);
+        throw new Error(`HTTP error: ${response.status}`);
       }
 
       const data = await response.json();
@@ -47,7 +47,7 @@ export async function fetchToExistingUsers(users, numberOfNew) {
       });
 
       if (!response.ok) {
-        new Error(`HTTP error: ${response.status}`);
+        throw new Error(`HTTP error: ${response.status}`);
       }
 
       const data = await response.json();
