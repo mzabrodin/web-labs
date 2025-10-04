@@ -4,7 +4,7 @@ import { fixUser, validateUser, validateUsers } from './validate-users.js';
 import filterUsers from './filter-users.js';
 import sortUsers from './sort-users.js';
 import searchUsers from './search-users.js';
-import { fetchRandomUsersInit, fetchToExistingUsers } from './fetchFromAPI.js';
+import { fetchRandomUsersInit, fetchToExistingUsers } from './fetch-from-api.js';
 
 document.addEventListener('DOMContentLoaded', async () => {
   //region data
