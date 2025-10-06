@@ -1,35 +1,29 @@
+import _ from 'lodash';
+
 const sortFields = ['full_name', 'age', 'b_date', 'country', 'course', 'gender'];
 
 function sortUsers(users, key, ascending = true) {
-  if (!sortFields.includes(key)) {
+  if (!_.includes(sortFields, key)) {
     return users;
   }
 
-  return users.slice()
-    .sort((a, b) => {
-      let valueA = a[key];
-      let valueB = b[key];
+  return _.orderBy(
+    users,
+    (users) => {
+      const value = _.get(users, key);
 
-      if (key === 'b_date') {
-        valueA = new Date(valueA);
-        valueB = new Date(valueB);
+      if (key === 'b_date' && value) {
+        return new Date(value);
       }
 
-      if (typeof valueA === 'string' && typeof valueB === 'string') {
-        valueA = valueA.toLocaleLowerCase();
-        valueB = valueB.toLocaleLowerCase();
+      if (_.isString(value)) {
+        return _.toLower(value);
       }
 
-      if (valueA < valueB) {
-        return ascending ? -1 : 1;
-      }
-
-      if (valueA > valueB) {
-        return ascending ? 1 : -1;
-      }
-
-      return 0;
-    });
+      return value;
+    },
+    [ascending ? 'asc' : 'desc'],
+  );
 }
 
 export default sortUsers;

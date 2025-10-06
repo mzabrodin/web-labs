@@ -1,4 +1,4 @@
-import searchUsers from './search-users.js';
+import searchUsers from './search-users';
 
 function calculatePercentage(users, searchField, searchValue) {
   if (!Array.isArray(users) || users.length === 0) return 0;

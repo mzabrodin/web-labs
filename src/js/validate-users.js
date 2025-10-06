@@ -1,12 +1,11 @@
+import _ from 'lodash';
+
 function capitalize(str) {
-  if (typeof str !== 'string' || str.length === 0) {
+  if (!_.isString(str) || str.length === 0) {
     return str;
   }
 
-  return str
-    .split('-')
-    .map(w => w.charAt(0)
-      .toLocaleUpperCase() + w.slice(1))
+  return _.map(str.split('-'), (w) => _.upperFirst(w))
     .join('-');
 }
 
@@ -27,33 +26,33 @@ function isValidPhone(phone) {
 export function fixUser(user) {
   const fixedUser = structuredClone(user);
 
-  if (typeof fixedUser.gender === 'string') {
+  if (_.isString(fixedUser.gender)) {
     fixedUser.gender = capitalize(fixedUser.gender);
   }
 
-  if (typeof fixedUser.full_name === 'string') {
+  if (_.isString(fixedUser.full_name)) {
     fixedUser.full_name = fixedUser.full_name
       .split(' ')
       .map(capitalize)
       .join(' ');
   }
-  if (typeof fixedUser.note === 'string') {
+  if (_.isString(fixedUser.note)) {
     fixedUser.note = capitalize(fixedUser.note);
   }
-  if (typeof fixedUser.state === 'string') {
+  if (_.isString(fixedUser.state)) {
     fixedUser.state = capitalize(fixedUser.state);
   }
-  if (typeof fixedUser.city === 'string') {
+  if (_.isString(fixedUser.city)) {
     fixedUser.city = capitalize(fixedUser.city);
   }
-  if (typeof fixedUser.country === 'string') {
+  if (_.isString(fixedUser.country)) {
     fixedUser.country = capitalize(fixedUser.country);
   }
-  if (typeof fixedUser.age === 'string' && !Number.isNaN(parseInt(fixedUser.age, 10))) {
+  if (_.isString(fixedUser.age) && !_.isNaN(parseInt(fixedUser.age, 10))) {
     fixedUser.age = parseInt(fixedUser.age, 10);
   }
 
-  if (typeof fixedUser.phone === 'string') {
+  if (_.isString(fixedUser.phone)) {
     fixedUser.phone = fixedUser.phone.replace(/\D/g, '');
   }
 
@@ -98,15 +97,8 @@ export function validateUser(user) {
 }
 
 export function validateUsers(users) {
-  return users
-    .map((user) => {
-      const fixedUser = fixUser(user);
-      const result = validateUser(fixedUser);
-      if (!result.valid) {
-        //console.error(`user ${fixedUser.full_name} is invalid:`, result.errors);
-        return null;
-      }
-      return fixedUser;
-    })
-    .filter((u) => u !== null);
+  return _.filter(_.map(users, (user) => {
+    const fixedUser = fixUser(user);
+    return validateUser(fixedUser).valid ? fixedUser : null;
+  }));
 }

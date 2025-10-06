@@ -1,3 +1,5 @@
+import _ from 'lodash';
+
 const courses = [
   'Mathematics',
   'Physics',
@@ -14,7 +16,7 @@ const courses = [
 ];
 
 function getRandomElem(array) {
-  return array[Math.floor(Math.random() * array.length)];
+  return _.sample(array);
 }
 
 function getRandomColor() {
@@ -32,14 +34,13 @@ function calculateAge(birthDate) {
   }
 
   const birth = new Date(birthDate);
-  if (Number.isNaN(birth.getTime())) {
+  if (_.isNaN(birth.getTime())) {
     return null;
   }
 
   const today = new Date();
-  let age = today.getFullYear() - birth.getFullYear();
-
   const monthDifference = today.getMonth() - birth.getMonth();
+  let age = today.getFullYear() - birth.getFullYear();
 
   if (monthDifference < 0 || (monthDifference === 0 && today.getDate() < birth.getDate())) {
     age -= 1;
@@ -49,7 +50,7 @@ function calculateAge(birthDate) {
 }
 
 function formatUser(user) {
-  const id = (typeof user.id === 'string' ? user.id : null)
+  const id = (_.isString(user.id) ? user.id : null)
     || (user.id && typeof user.id === 'object'
       ? `${user.id.name || ''}${user.id.value || ''}`.trim() || null
       : null)
@@ -86,69 +87,52 @@ function formatUser(user) {
 }
 
 function isDuplicate(firstUser, secondUser) {
-  return !!((firstUser.id && secondUser.id && firstUser.id === secondUser.id)
-    || (firstUser.email && secondUser.email && firstUser.email === secondUser.email)
-    || (firstUser.full_name && secondUser.full_name
-      && firstUser.full_name === secondUser.full_name));
+  return _.some(['id', 'email', 'full_name'], (key) => _.has(firstUser, key) && _.has(secondUser, key) && firstUser[key] === secondUser[key]);
 }
 
 function mergeUserData(firstUser, secondUser) {
   const mergedUser = structuredClone(firstUser);
 
-  Object.keys(secondUser)
-    .forEach((key) => {
-      const firstValue = mergedUser[key];
-      const secondValue = secondUser[key];
+  _.forOwn(secondUser, (secondValue, key) => {
+    const firstValue = mergedUser[key];
 
-      if (secondValue != null) {
-        if (typeof secondValue === 'object' && !Array.isArray(secondValue)) {
-          mergedUser[key] = mergeUserData(firstValue || {}, secondValue);
-        } else if (firstValue == null) {
-          mergedUser[key] = secondValue;
-        } else if ((typeof firstValue === 'boolean' && firstValue === false && secondValue === true)
-          || (typeof firstValue === 'number' && firstValue === 0 && typeof secondValue === 'number' && secondValue !== 0)
-          || (typeof firstValue === 'string' && firstValue.trim() === '' && typeof secondValue === 'string' && secondValue.trim() !== '')
-        ) {
-          mergedUser[key] = secondValue;
-        }
+    if (secondValue != null) {
+      if (_.isPlainObject(secondValue)) {
+        mergedUser[key] = mergeUserData(firstValue || {}, secondValue);
+      } else if (firstValue == null) {
+        mergedUser[key] = secondValue;
+      } else if (
+        (_.isBoolean(firstValue) && firstValue === false && secondValue === true)
+        || (_.isNumber(firstValue) && firstValue === 0 && _.isNumber(secondValue) && secondValue !== 0)
+        || (_.isString(firstValue) && _.trim(firstValue) === '' && _.isString(secondValue) && _.trim(secondValue) !== '')
+      ) {
+        mergedUser[key] = secondValue;
       }
-    });
+    }
+  });
 
   return mergedUser;
 }
 
 function finalizeUser(user) {
-  const finalizedUser = { ...user };
-
-  if (!finalizedUser.course) {
-    finalizedUser.course = getRandomElem(courses);
-  }
-  if (!finalizedUser.bg_color) {
-    finalizedUser.bg_color = getRandomColor();
-  }
-  if (finalizedUser.b_date) {
-    finalizedUser.age = calculateAge(finalizedUser.b_date);
-  }
-  if (finalizedUser.favorite == null) {
-    finalizedUser.favorite = false;
-  }
-  if (!finalizedUser.note) {
-    finalizedUser.note = '';
-  }
-  if (!finalizedUser.id) {
-    finalizedUser.id = crypto.randomUUID();
-  }
-
-  return finalizedUser;
+  return {
+    ...user,
+    course: user.course || getRandomElem(courses),
+    bg_color: user.bg_color || getRandomColor(),
+    age: user.b_date ? calculateAge(user.b_date) : user.age,
+    favorite: user.favorite ?? false,
+    note: user.note || '',
+    id: user.id || crypto.randomUUID(),
+  };
 }
 
 function mergeUsers(firstArray, secondArray) {
-  const allUsers = structuredClone([...firstArray, ...secondArray]);
+  const allUsers = [...firstArray, ...secondArray];
   const processed = [];
 
-  allUsers.forEach((user) => {
+  _.forEach(allUsers, (user) => {
     const formatted = formatUser(user);
-    const existingIndex = processed.findIndex((u) => isDuplicate(u, formatted));
+    const existingIndex = _.findIndex(processed, (existing) => isDuplicate(existing, formatted));
 
     if (existingIndex !== -1) {
       processed[existingIndex] = mergeUserData(processed[existingIndex], formatted);
@@ -157,7 +141,7 @@ function mergeUsers(firstArray, secondArray) {
     }
   });
 
-  return processed.map((user) => finalizeUser(user));
+  return _.map(processed, (user) => finalizeUser(user));
 }
 
 export default mergeUsers;
