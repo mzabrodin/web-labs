@@ -13,7 +13,7 @@ import '@webdatarocks/webdatarocks/webdatarocks.min.css';
 import 'leaflet/dist/leaflet.css';
 import 'leaflet-defaulticon-compatibility/dist/leaflet-defaulticon-compatibility.webpack.css';
 import 'leaflet-defaulticon-compatibility';
-import '../css/index.css';
+import '../scss/index.scss';
 
 Chart.register(PieController, ArcElement, Tooltip, Legend, Title);
 document.addEventListener('DOMContentLoaded', async () => {
@@ -715,6 +715,13 @@ document.addEventListener('DOMContentLoaded', async () => {
     renderFlatTablePage(users);
     renderByCountiesTable(users);
     renderPieChart(users);
+
+    ageSelect.value = '';
+    regionSelect.value = '';
+    sexSelect.value = '';
+    photoCheckbox.checked = false;
+    favoritesCheckbox.checked = false;
+    searchInput.value = '';
 
     document.getElementById('statistics')
       .scrollIntoView();

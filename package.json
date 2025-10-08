@@ -1,11 +1,11 @@
 {
   "name": "lab_boilerplate",
   "description": "",
-  "main": "./src/index.js",
+  "main": "./src/js/app.js",
   "scripts": {
     "start": "node express.js",
     "build": "rm -f build && cross-env NODE_ENV=production webpack --progress",
-    "dev": "cross-env NODE_ENV=development NODE_OPTIONS='--openssl-legacy-provider' webpack-dev-server --open",
+    "dev": "cross-env NODE_ENV=development webpack-dev-server --open",
     "lint": "eslint src/js",
     "stylelint": "stylelint src/css",
     "server": "json-server --watch src/json/db.json --port 3002"
