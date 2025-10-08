@@ -7,7 +7,6 @@ import dayjs from 'dayjs';
 import WebDataRocks from '@webdatarocks/webdatarocks';
 import { fixUser, validateUser } from './validate-users';
 import filterUsers from './filter-users';
-import sortUsers from './sort-users';
 import searchUsers from './search-users';
 import { fetchRandomUsersInit, fetchToExistingUsers } from './fetch-from-api';
 import '@webdatarocks/webdatarocks/webdatarocks.min.css';
@@ -20,14 +19,6 @@ Chart.register(PieController, ArcElement, Tooltip, Legend, Title);
 document.addEventListener('DOMContentLoaded', async () => {
   // region data
   let users = await fetchRandomUsersInit();
-
-  const tableKeys = {
-    'table-name': 'full_name',
-    'table-speciality': 'course',
-    'table-age': 'age',
-    'table-gender': 'gender',
-    'table-nationality': 'country',
-  };
   // endregion
 
   // region elements
@@ -60,10 +51,12 @@ document.addEventListener('DOMContentLoaded', async () => {
   const noCoordsMessage = document.getElementById('no-coords');
 
   const pieChartCanvas = document.getElementById('stats-chart');
+  const pieChartButton = document.getElementById('pie-chart');
 
   const countriesReportButton = document.getElementById('country-report');
   const flatTableButton = document.getElementById('flat-table');
-  const pivotContainerDiv = document.getElementById('pivot-container');
+  const pivotFlatTableContainerDiv = document.getElementById('pivot-flat-table-container');
+  const pivotByCountriesContainerDiv = document.getElementById('pivot-by-countries-container');
   const moreTeachersButton = document.getElementById('more-teachers');
   // endregion
 
@@ -71,32 +64,18 @@ document.addEventListener('DOMContentLoaded', async () => {
   let teacherMap = null;
   let teacherMarker = null;
   let pieChart = null;
-  let pivot = null;
+  let pivotFlatTable = null;
+  let pivotByCountries = null;
   // endregion
 
   // region extension functions
-  function initPivotContainer(users) {
-    if (pivot) {
-      return;
-    }
-
-    pivot = new WebDataRocks({
-      container: '#pivot-container',
-      toolbar: false,
-      height: 500,
-      report: {
-        dataSource: { data: users },
-      },
-    });
-  }
-
   function generateColors(count) {
     const hueStep = 360 / count;
     return _.map(_.range(count), (i) => `hsl(${i * hueStep}, 70%, 60%)`);
   }
 
   function getDataForPieChart(users) {
-    const counts = _.countBy(users, 'country');
+    const counts = _.countBy(users, 'course');
     return {
       labels: _.keys(counts),
       data: _.values(counts),
@@ -109,12 +88,15 @@ document.addEventListener('DOMContentLoaded', async () => {
       data,
     } = getDataForPieChart(users);
 
-    const ctx = pieChartCanvas.getContext('2d');
-
     if (pieChart) {
-      pieChart.destroy();
+      pieChart.data.labels = labels;
+      pieChart.data.datasets[0].data = data;
+      pieChart.data.datasets[0].backgroundColor = generateColors(data.length);
+      pieChart.update();
+      return;
     }
 
+    const ctx = pieChartCanvas.getContext('2d');
     pieChart = new Chart(ctx, {
       type: 'pie',
       data: {
@@ -142,7 +124,7 @@ document.addEventListener('DOMContentLoaded', async () => {
           },
           title: {
             display: true,
-            text: 'Teachers by Countries',
+            text: 'Teachers by Courses',
             font: {
               size: 18,
             },
@@ -225,6 +207,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     teacherCardDialog.dataset.lat = user.coordinates?.latitude ?? '';
     teacherCardDialog.dataset.lng = user.coordinates?.longitude ?? '';
+    // console.log(`${teacherCardDialog.dataset.lat} ${teacherCardDialog.dataset.lng}`);
 
     teacherCardDialog.showModal();
     wrapper.style.filter = 'blur(5px)';
@@ -233,95 +216,107 @@ document.addEventListener('DOMContentLoaded', async () => {
   // endregion
 
   // region render
-  function renderByCountiesTable(users) {
-    initPivotContainer(users);
-    pivot.clear();
-    pivot.setReport({
-      dataSource: {
-        data: users,
-      },
-      slice: {
-        rows: [
-          {
-            uniqueName: 'country',
-            caption: 'Country',
+  function renderByCountiesTable(data) {
+    if (!pivotByCountries) {
+      pivotByCountries = new WebDataRocks({
+        container: '#pivot-by-countries-container',
+        toolbar: false,
+        height: 500,
+        report: {
+          dataSource: {
+            data,
           },
-        ],
-        columns: [
-          { uniqueName: 'Measures' },
-        ],
-        measures: [
-          {
-            uniqueName: 'full_name',
-            aggregation: 'count',
-            caption: 'Teachers',
+          slice: {
+            rows: [
+              {
+                uniqueName: 'country',
+                caption: 'Country',
+              },
+            ],
+            columns: [
+              { uniqueName: 'Measures' },
+            ],
+            measures: [
+              {
+                uniqueName: 'full_name',
+                aggregation: 'count',
+                caption: 'Teachers',
+              },
+              {
+                uniqueName: 'age',
+                aggregation: 'average',
+                caption: 'Age',
+                format: 'age',
+              },
+            ],
           },
-          {
-            uniqueName: 'age',
-            aggregation: 'average',
-            caption: 'Age',
-            format: '1',
+          options: {
+            grid: {
+              type: 'compact',
+              title: 'Teacher by Countries',
+              showHeaders: false,
+            },
           },
-        ],
-      },
-      options: {
-        grid: {
-          type: 'compact',
-          title: 'Teacher by Countries',
-          showHeaders: false,
+          formats: [{
+            name: 'age',
+            decimalPlaces: 1,
+          }],
         },
-      },
-      formats: [{
-        name: '1',
-        decimalPlaces: 1,
-      }],
-    });
+      });
+    } else {
+      pivotByCountries.updateData({ data });
+    }
   }
 
-  function renderFlatTablePage(data, clear = true) {
-    initPivotContainer(data);
-    if (clear) {
-      pivot.clear();
-    }
-    pivot.setReport({
-      dataSource: {
-        data,
-      },
-      slice: {
-        rows: [
-          {
-            uniqueName: 'full_name',
-            caption: 'Name',
+  function renderFlatTablePage(data) {
+    if (!pivotFlatTable) {
+      pivotFlatTable = new WebDataRocks({
+        container: '#pivot-flat-table-container',
+        toolbar: false,
+        height: 500,
+        report: {
+          dataSource: {
+            data,
           },
-          {
-            uniqueName: 'course',
-            caption: 'Speciality',
+          slice: {
+            rows: [
+              {
+                uniqueName: 'full_name',
+                caption: 'Name',
+              },
+              {
+                uniqueName: 'course',
+                caption: 'Speciality',
+              },
+              {
+                uniqueName: 'age',
+                caption: 'Age',
+              },
+              {
+                uniqueName: 'gender',
+                caption: 'Gender',
+              },
+              {
+                uniqueName: 'country',
+                caption: 'Nationality',
+              },
+            ],
+            flatOrder: ['full_name', 'course', 'age', 'gender', 'country'],
           },
-          {
-            uniqueName: 'age',
-            caption: 'Age',
+          options: {
+            grid: {
+              type: 'flat',
+              showTotals: 'off',
+              showGrandTotals: 'off',
+              title: 'Flat Table',
+              showHeaders: false,
+            },
           },
-          {
-            uniqueName: 'gender',
-            caption: 'Gender',
-          },
-          {
-            uniqueName: 'country',
-            caption: 'Nationality',
-          },
-        ],
-        flatOrder: ['full_name', 'course', 'age', 'gender', 'country'],
-      },
-      options: {
-        grid: {
-          type: 'flat',
-          showTotals: 'off',
-          showGrandTotals: 'off',
-          title: 'Flat Table',
-          showHeaders: false,
         },
-      },
-    });
+      });
+    } else {
+      pivotFlatTable.updateData({ data });
+    }
   }
 
   function renderTeacherList(list) {
@@ -692,12 +687,24 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
   });
 
+  flatTableButton.addEventListener('click', () => {
+    pivotFlatTableContainerDiv.style.display = 'block';
+    pivotByCountriesContainerDiv.style.display = 'none';
+    pieChartCanvas.style.display = 'none';
+    renderFlatTablePage(users);
+  });
+
   countriesReportButton.addEventListener('click', () => {
+    pivotByCountriesContainerDiv.style.display = 'block';
+    pivotFlatTableContainerDiv.style.display = 'none';
+    pieChartCanvas.style.display = 'none';
     renderByCountiesTable(users);
   });
 
-  flatTableButton.addEventListener('click', () => {
-    renderFlatTablePage(users);
+  pieChartButton.addEventListener('click', () => {
+    pieChartCanvas.style.display = 'block';
+    pivotFlatTableContainerDiv.style.display = 'none';
+    pivotByCountriesContainerDiv.style.display = 'none';
   });
 
   moreTeachersButton.addEventListener('click', async () => {
@@ -705,10 +712,12 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     renderTeacherList(users);
     renderFavorites(users);
+    renderFlatTablePage(users);
+    renderByCountiesTable(users);
     renderPieChart(users);
-    if (pivot) {
-      pivot.updateData({ data: users });
-    }
+
+    document.getElementById('statistics')
+      .scrollIntoView();
   });
   // endregion
 
@@ -717,7 +726,8 @@ document.addEventListener('DOMContentLoaded', async () => {
   renderTeacherList(users);
   renderFavorites(users);
   renderFavoritesArrows();
-  renderPieChart(users);
   renderFlatTablePage(users, false);
+  renderPieChart(users);
+  pieChartCanvas.style.display = 'none';
   // endregion
 });

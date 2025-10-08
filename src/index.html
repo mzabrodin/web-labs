@@ -75,24 +75,16 @@
         <hr class="section-border">
         <section class="statistics-section" id="statistics">
             <h2>Statistics</h2>
-<!--            <table>-->
-<!--                <thead>-->
-<!--                <tr>-->
-<!--                    <th id="table-name">Name</th>-->
-<!--                    <th id="table-speciality">Speciality</th>-->
-<!--                    <th id="table-age">Age</th>-->
-<!--                    <th id="table-gender">Gender</th>-->
-<!--                    <th id="table-nationality">Nationality</th>-->
-<!--                </tr>-->
-<!--                </thead>-->
-            <!--            </table>-->
-            <div class="webdatarocks-table">
+            <div class="stats-buttons">
                 <button id="flat-table">Flat Table</button>
                 <button id="country-report">Countries Report</button>
+                <button id="pie-chart">Pie Chart</button>
                 <button id="more-teachers">More Teachers</button>
-                <div id="pivot-container"></div>
             </div>
-            <div id="pagination" class="pagination"></div>
+            <div class="webdatarocks-table">
+                <div id="pivot-flat-table-container"></div>
+                <div id="pivot-by-countries-container"></div>
+            </div>
             <canvas id="stats-chart" class="chart"></canvas>
         </section>
         <hr class="section-border">
